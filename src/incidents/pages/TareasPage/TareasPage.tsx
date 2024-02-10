@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useIncidentsStore } from "../../../store";
-
+import { Registro } from "../../components";
 
 
 export const TareasPage = () => {
@@ -11,30 +11,44 @@ export const TareasPage = () => {
 
   useEffect(() => {
     getIncidents();
-    
-    
   }, [])
-  console.log(incidents?.incidencias)
   
   return (
 
-    <>
-    {
-      isLoading 
-        ? <p>Cargando...</p>
-        : <ul>
-            {incidents?.incidencias.map((incident) => (
-              <li key={incident.ID_incidencia}>
-                <p>Asunto: {incident.asunto}</p>
-                <p>Detalle: {incident.detalle}</p>
-                {/* Agrega más detalles según tu estructura de datos */}
-              </li>
-            ))}
-          </ul>
-
-    }
-    
-    
-    </>
+    <div className=" card mt-4 mx-4 pt-4 px-2">
+      <table className="table ">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Asunto</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Usuario</th>
+            <th scope="col">Creado</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        {
+          isLoading 
+            ? <p>Cargando...</p>
+            : incidents?.incidencias.map((incident) => (
+                <tbody key={incident.ID_incidencia} className="table-group-divider">
+                  <Registro 
+                    id={incident.ID_incidencia}
+                    asunto={incident.asunto}
+                    detalle={incident.detalle}
+                    estado={incident.estado}
+                    fecha={incident.fecha_reporte}
+                    usuario={incident.usuario.nombre}
+                  />
+                </tbody>
+              ))
+        }
+      </table>
+    </div>
   )
 }
+
+
+
+

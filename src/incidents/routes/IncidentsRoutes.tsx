@@ -1,6 +1,6 @@
 import { Route, Switch } from "wouter";
 import { HomePage, TareasPage } from "../pages";
-import { Navbar } from "../../ui/components/Navbar";
+import { Navbar } from "../../ui/components";
 
 
 export const IncidentsRoutes = () => {
