@@ -2,11 +2,33 @@ import { Link } from "wouter";
 import { FaUserAlt } from "react-icons/fa";
 import { Modal } from "..";
 import { FormIncident } from "../../../incidents/components";
+import { useUserStore } from "../../../store/user/user.store";
+import { readFromLocalStorage } from '../../../utils/localStorage';
 
 
+interface UsuarioResponse {
+  message: string;
+  user: Usuario;
+}
 
+interface Usuario {
+  ID_usuario: number;
+  nombre: string;
+  correo: string;
+  contraseña: string;
+  rol: string;
+}
 
 export const Navbar = () => {
+
+  const cleanUser = useUserStore(state => state.cleanUser);
+  const usuario =  readFromLocalStorage<UsuarioResponse>('LoginUser')
+
+  const handleLogoutClick = () => {
+    cleanUser();
+    localStorage.clear();
+  }
+
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
@@ -51,7 +73,7 @@ export const Navbar = () => {
             </li>
 
             <li className="nav-item">
-              <Link to='/login' className="nav-link" >
+              <Link to='/login' className="nav-link" onClick={handleLogoutClick} >
                 Salir
               </Link>
             </li>
@@ -72,7 +94,9 @@ export const Navbar = () => {
 
           <ul className="navbar-nav  mx-3">
             <li className="nav-item">
-              <Link to="/home" className="nav-link active" aria-current="page" >
+              <Link to="#" className="nav-link active" aria-current="page" >
+                {usuario?.user.nombre}
+                &nbsp;&nbsp;&nbsp;
                 <FaUserAlt />
               </Link>
             </li>
