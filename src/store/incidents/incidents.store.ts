@@ -4,7 +4,7 @@
 import { create } from 'zustand'
 import { incidentsApi } from '../../api/incidentsApi';
 
-interface Incident {
+export interface Incident {
     ID_incidencia: number;
     asunto: string;
     detalle: string;
@@ -30,6 +30,8 @@ interface IncidentsState {
     isLoading: boolean;
     incidents: RespuestaServidor | null;
     getIncidents: () => Promise<void>;
+    filterByState: (state:string) => Promise<void>;
+    searchIncident: (query:string) => Promise<void>;
 }
 
 export const useIncidentsStore = create<IncidentsState>()((set) => ({
@@ -47,5 +49,32 @@ export const useIncidentsStore = create<IncidentsState>()((set) => ({
             set({ isLoading: false });
         }
     },
+
+    //Filters
+
+    filterByState: async (state) => {
+        set({ isLoading: true });
+        try {
+            const { data } = await incidentsApi.get<RespuestaServidor>(`/incidents/filter/${state}`);
+            console.log(data);
+            set({ incidents: data, isLoading: false });
+        } catch (error) {
+            console.error('Error al filtrar incidentes:', error);
+            set({ isLoading: false });
+        }
+    },
+
+    searchIncident: async (query) => {
+        set({ isLoading: true });
+        try {
+            const { data } = await incidentsApi.get<RespuestaServidor>(`/incidents/search?asunto=${query}`);
+            console.log(data);
+            set({ incidents: data, isLoading: false });
+        } catch (error) {
+            console.error('Error al encontrar incidentes:', error);
+            set({ isLoading: false });
+        }
+    },
+
 
 }));
