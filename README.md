@@ -1,14 +1,21 @@
 # Nombre del Proyecto
-Gstion de Incidencias - GDI
-
-## Descripción
+Gestión de Incidencias - GDI
 Reto Técnico, sistema de incidencias.
 
-## Cuentas para Iniciar Sesión
-Para acceder al sistema, puedes utilizar las siguientes cuentas:
+## Indicaciones
+- Las variables de entorno ya están indicadas.
+- Levantar el front y back
+- Acerca de la base de datos, esta se encuentra en la nube con una data por defecto.
 
-### Usuario Normal
+
+## Cuentas para Iniciar Sesión
+Para el inicio de sesión de usuario, puedes utilizar las siguientes cuentas:
+
+### Usuarios Normal
 - **Correo Electrónico:** user@user.com
+- **Contraseña:** 12345
+
+- **Correo Electrónico:** carlo@carlo.com
 - **Contraseña:** 12345
 
 ### Administrador

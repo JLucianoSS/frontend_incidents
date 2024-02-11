@@ -6,9 +6,8 @@ import {
 import { userInLocalStorage } from "../../../utils";
 import { DetalleRegistro, DisplayEdit, StateColor } from "../../components";
 import { IoTrashSharp } from "react-icons/io5";
-import { FaEye } from "react-icons/fa";
 import Swal from "sweetalert2";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { capitalizeFirstLetter } from "../../../utils/capitalize";
 
 interface RegistroProps {
@@ -82,8 +81,8 @@ export const Registro: React.FC<RegistroProps> = ({
           }
         </b>
       </td>
-      <td>{asunto}</td>
-      <td>{detalle}</td>
+      <td><center>{asunto}</center></td>
+      <td>{tipo}</td>
       <td>{usuario}</td>
       <td>{fecha}</td>
       <td style={{display:'flex', gap:'0.5rem'}}>

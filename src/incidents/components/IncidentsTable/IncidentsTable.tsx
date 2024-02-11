@@ -18,9 +18,9 @@ const IncidentsTable: React.FC<IncidentsTableProps> = ({ incidents, usuario }) =
           <thead>
             <tr>
               <th scope="col">ID</th>
-              <th scope="col">Estado</th>
-              <th scope="col">Asunto</th>
-              <th scope="col">Descripción</th>
+              <th scope="col"><center>Estado</center></th>
+              <th scope="col"><center>Asunto</center></th>
+              <th scope="col">Tipo de Incidente</th>
               <th scope="col">Usuario</th>
               <th scope="col">Creado</th>
               <th scope="col">Acciones</th>
