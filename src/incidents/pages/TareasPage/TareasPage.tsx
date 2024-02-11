@@ -1,54 +1,45 @@
-import { useEffect } from "react"
+import { useEffect } from "react";
 import { useIncidentsStore } from "../../../store";
-import { Registro } from "../../components";
+import { SearchBar,FilterByState, FloatingButton } from "../../components";
+import { userInLocalStorage } from "../../../utils";
+import { Alert, Loading } from "../../../ui/components";
+import IncidentsTable from "../../components/IncidentsTable/IncidentsTable";
 
 
 export const TareasPage = () => {
+  const isLoading = useIncidentsStore((state) => state.isLoading);
+  const incidents = useIncidentsStore((state) => state.incidents);
+  const getIncidents = useIncidentsStore((state) => state.getIncidents);
+  const filterByState = useIncidentsStore((state) => state.filterByState);
+  const usuario = userInLocalStorage();
 
-  const isLoading = useIncidentsStore(state => state.isLoading);
-  const incidents = useIncidentsStore(state => state.incidents);
-  const getIncidents = useIncidentsStore(state => state.getIncidents);
+  const handleStateChange = (selectedState: string) => {
+    // console.log(`Estado seleccionado: ${selectedState}`);
+    if(selectedState === 'Todos') return getIncidents();
+    filterByState(selectedState);
+  };
 
   useEffect(() => {
     getIncidents();
-  }, [])
-  
+  }, []);
+
+
+  console.log(incidents)
+
   return (
-
-    <div className=" card mt-4 mx-4 pt-4 px-2">
-      <table className="table ">
-        <thead>
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Estado</th>
-            <th scope="col">Asunto</th>
-            <th scope="col">Descripción</th>
-            <th scope="col">Usuario</th>
-            <th scope="col">Creado</th>
-            <th scope="col">Acciones</th>
-          </tr>
-        </thead>
-        {
-          isLoading 
-            ? <p>Cargando...</p>
-            : incidents?.incidencias.map((incident) => (
-                <tbody key={incident.ID_incidencia} className="table-group-divider">
-                  <Registro 
-                    id={incident.ID_incidencia}
-                    asunto={incident.asunto}
-                    detalle={incident.detalle}
-                    estado={incident.estado}
-                    fecha={incident.fecha_reporte}
-                    usuario={incident.usuario.nombre}
-                  />
-                </tbody>
-              ))
-        }
-      </table>
-    </div>
-  )
-}
-
-
-
-
+    <>
+      <SearchBar />
+      <FilterByState handleStateChange={handleStateChange}/>
+      {
+        incidents?.incidencias.length !== 0
+          ? (isLoading 
+              ? <Loading />
+              : <IncidentsTable incidents={incidents} usuario={usuario}/>)
+          : <Alert message="No hay incidencias para mostrar"/>
+      }
+      {
+        usuario?.user.rol === 'admin' ? <FloatingButton/> : ''
+      }
+    </>
+  );
+};

@@ -30,7 +30,7 @@ export const Form = () => {
     if(user !== null){
       if(user?.message === "Usuario encontrado"){
         saveToLocalStorage('LoginUser', user)
-        navigate('/tareas');
+        navigate('/tareas',{replace:false});
       }
     }
   }, [user]);

@@ -1,10 +1,10 @@
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { FaUserAlt } from "react-icons/fa";
 import { Modal } from "..";
 import { FormIncident } from "../../../incidents/components";
 import { useUserStore } from "../../../store/user/user.store";
 import { userInLocalStorage } from "../../../utils/userLocalStorage";
-
+import { ImExit } from "react-icons/im";
 
 
 
@@ -12,16 +12,18 @@ export const Navbar = () => {
 
   const cleanUser = useUserStore(state => state.cleanUser);
   const usuario =  userInLocalStorage();
+  const [_, navigate] = useLocation();
 
   const handleLogoutClick = () => {
     cleanUser();
     localStorage.clear();
+    navigate('/login',{replace:false});
   }
 
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
-      <div className="container-fluid">
-        <Link to="/home" className="navbar-brand" >
+      <div className="container-fluid px-5">
+        <Link to="/tareas#" className="navbar-brand" >
           GDI
         </Link>
         <button
@@ -35,63 +37,46 @@ export const Navbar = () => {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+        <div className="collapse navbar-collapse px-4" id="navbarSupportedContent">
 
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            {/* <li className="nav-item">
-              <Link to="/home" className="nav-link active" aria-current="page" >
-                Home
-              </Link>
-            </li> */}
 
             <li className="nav-item">
               <Link to='/tareas' className="nav-link" >
-                Tareas
+                Mis reportes
               </Link>
             </li>
 
             <li className="nav-item">
               {/* Boton para abrir modal */}
               <Link to="#" className="nav-link" data-bs-toggle="modal" data-bs-target="#modalAñadir" >
-                Añadir
+                <i>Añadir</i>
               </Link>
               {/* El modal que abre ese botón */}
               <Modal  id="modalAñadir" title="Añadir Incidencia">
                 <FormIncident/>
               </Modal>
             </li>
-
-            <li className="nav-item">
-              <Link to='/login' className="nav-link" onClick={handleLogoutClick} >
-                Salir
-              </Link>
-            </li>
-            
           </ul>
 
-          <form className="d-flex" role="search">
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button className="btn btn-outline-success" type="submit">
-              Search
+
+          <div className="btn-group">
+            <button type="button" className="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              {usuario?.user.nombre}
+                  &nbsp;&nbsp;&nbsp;
+                  <FaUserAlt />
             </button>
-          </form>
-
-          <ul className="navbar-nav  mx-3">
-            <li className="nav-item">
-              <Link to="#" className="nav-link active" aria-current="page" >
-                {usuario?.user.nombre}
-                &nbsp;&nbsp;&nbsp;
-                <FaUserAlt />
-              </Link>
-            </li>
-          </ul>
-          
-
+            <ul className="dropdown-menu dropdown-menu-end">
+              <li><Link to='/login' className="dropdown-item" onClick={handleLogoutClick} >
+                <b>
+                  <ImExit />
+                  &nbsp;
+                  Salir
+                </b>
+              </Link></li>
+            </ul>
+          </div>
+        
         </div>
       </div>
     </nav>

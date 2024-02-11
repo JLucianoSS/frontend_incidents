@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useTypesStore, useCreateIncidentStore } from "../../../store";
+import { useTypesStore, useCreateIncidentStore, useIncidentsStore } from "../../../store";
 import { useForm } from "../../../hooks/useForm";
 import { userInLocalStorage, areThereErrors } from "../../../utils";
 import { validate } from "./validation";
@@ -10,9 +10,10 @@ export const FormIncident = () => {
   const types = useTypesStore((state) => state.types);
   const getTypesIncidents = useTypesStore((state) => state.getTypesIncidents);
   const postIncident = useCreateIncidentStore((state) => state.postIncident);
+  const getIncidents = useIncidentsStore((state) => state.getIncidents);
   const usuario = userInLocalStorage();
   
-  const { formState, onInputChange, errors } = useForm({
+  const { formState, onInputChange, errors, resetForm } = useForm({
     asunto: "",
     detalle: "",
     ID_usuario: usuario?.user.ID_usuario,
@@ -21,7 +22,6 @@ export const FormIncident = () => {
 
   const handleSubmit = (event: React.MouseEvent<HTMLFormElement, MouseEvent>): void => {
     event.preventDefault();
-
     Swal.fire({
       title: "Aviso",
       text: "Usted reportará esta incidencia a los administradores",
@@ -30,9 +30,10 @@ export const FormIncident = () => {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Enviar"
-    }).then((result) => {
+    }).then(async(result) => {
       if (result.isConfirmed) {
-        postIncident(formState);
+        await postIncident(formState);
+        getIncidents();
         Swal.fire({
           title: "La incidencia ha sido registrada",
           text: "Un administrador se pondrá en contacto",
@@ -40,7 +41,7 @@ export const FormIncident = () => {
         });
       }
     });
-
+    resetForm();
   }
 
 
@@ -97,7 +98,7 @@ export const FormIncident = () => {
           )}
         </div>
 
-        <button type="submit" className="btn btn-success" disabled={!areThereErrors(errors)}>Enviar</button>
+        <button type="submit" className="btn btn-success mb-4" disabled={!areThereErrors(errors)}>Enviar</button>
       </form>
     </div>
   );

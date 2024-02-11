@@ -22,6 +22,11 @@ export const useForm = (initialForm: FormState = {}, validate?: FormValidation) 
     });
   };
 
+  const resetForm = () => {
+    setFormState(initialForm);
+    setErrors({});
+  };
+
   useEffect(() => {
     if (validate) {
       setErrors(validate(formState));
@@ -33,6 +38,7 @@ export const useForm = (initialForm: FormState = {}, validate?: FormValidation) 
     setFormState,
     onInputChange,
     errors,
+    resetForm
   };
 };
 
