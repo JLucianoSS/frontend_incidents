@@ -1,27 +1,59 @@
 import { useEffect } from "react";
-import { useTypesStore } from "../../../store/typesIncidents/typesIncidents.store";
+import { useTypesStore, useCreateIncidentStore } from "../../../store";
 import { useForm } from "../../../hooks/useForm";
+import { userInLocalStorage, areThereErrors } from "../../../utils";
+import { validate } from "./validation";
+import Swal from "sweetalert2";
 
 export const FormIncident = () => {
+
   const types = useTypesStore((state) => state.types);
   const getTypesIncidents = useTypesStore((state) => state.getTypesIncidents);
-
+  const postIncident = useCreateIncidentStore((state) => state.postIncident);
+  const usuario = userInLocalStorage();
+  
   const { formState, onInputChange, errors } = useForm({
     asunto: "",
     detalle: "",
-    ID_usuario: 0,
+    ID_usuario: usuario?.user.ID_usuario,
     ID_tipo: 1,
-  });
+  }, validate);
+
+  const handleSubmit = (event: React.MouseEvent<HTMLFormElement, MouseEvent>): void => {
+    event.preventDefault();
+
+    Swal.fire({
+      title: "Aviso",
+      text: "Usted reportará esta incidencia a los administradores",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Enviar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        postIncident(formState);
+        Swal.fire({
+          title: "La incidencia ha sido registrada",
+          text: "Un administrador se pondrá en contacto",
+          icon: "success"
+        });
+      }
+    });
+
+  }
+
 
   useEffect(() => {
     getTypesIncidents();
   }, []);
 
-  console.log(types);
+
+
 
   return (
     <div className=" px-4 ">
-      <form>
+      <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label className="form-label">Tipo:</label>
           <select className="form-select" id="selecion" name="ID_tipo"  value={formState.ID_tipo} onChange={onInputChange} >
@@ -31,7 +63,7 @@ export const FormIncident = () => {
               </option>
             ))}
           </select>
-          <div className="form-text text-danger">Campo requerido</div>
+          {/* <div className="form-text text-danger">Campo requerido</div> */}
         </div>
 
         <div className="mb-3">
@@ -46,8 +78,8 @@ export const FormIncident = () => {
             onChange={onInputChange}
           />
           
-          {errors.email && (
-            <div className="form-text text-danger">Campo requerido</div>
+          {errors.asunto && (
+            <div className="form-text text-danger">{errors.asunto}</div>
           )}
         </div>
 
@@ -60,8 +92,12 @@ export const FormIncident = () => {
             value={formState.detalle}
             onChange={onInputChange}
           />
-          <div className="form-text text-danger">Campo requerido</div>
+          {errors.detalle && (
+            <div className="form-text text-danger">{errors.detalle}</div>
+          )}
         </div>
+
+        <button type="submit" className="btn btn-success" disabled={!areThereErrors(errors)}>Enviar</button>
       </form>
     </div>
   );

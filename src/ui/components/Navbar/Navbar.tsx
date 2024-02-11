@@ -3,26 +3,15 @@ import { FaUserAlt } from "react-icons/fa";
 import { Modal } from "..";
 import { FormIncident } from "../../../incidents/components";
 import { useUserStore } from "../../../store/user/user.store";
-import { readFromLocalStorage } from '../../../utils/localStorage';
+import { userInLocalStorage } from "../../../utils/userLocalStorage";
 
 
-interface UsuarioResponse {
-  message: string;
-  user: Usuario;
-}
 
-interface Usuario {
-  ID_usuario: number;
-  nombre: string;
-  correo: string;
-  contraseña: string;
-  rol: string;
-}
 
 export const Navbar = () => {
 
   const cleanUser = useUserStore(state => state.cleanUser);
-  const usuario =  readFromLocalStorage<UsuarioResponse>('LoginUser')
+  const usuario =  userInLocalStorage();
 
   const handleLogoutClick = () => {
     cleanUser();
