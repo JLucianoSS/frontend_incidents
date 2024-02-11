@@ -19,15 +19,7 @@ interface RegistroProps {
   fecha: string;
   tipo: string;
 }
-export const Registro: React.FC<RegistroProps> = ({
-  id,
-  estado,
-  asunto,
-  detalle,
-  usuario,
-  fecha,
-  tipo,
-}) => {
+export const Registro: React.FC<RegistroProps> = ({id,estado,asunto,detalle,usuario,fecha,tipo,}) => {
   const deleteIncident = useDeleteIncident((state) => state.deleteIncident);
   const updateIncident = useUpdateIncident((state) => state.updateIncident);
   const getIncidents = useIncidentsStore((state) => state.getIncidents);
@@ -90,6 +82,7 @@ export const Registro: React.FC<RegistroProps> = ({
           <DisplayEdit
             asunto={asunto}
             id={id}
+            estado={estado}
             selectedEstado={selectedEstado}
             handleClickUpdate={handleClickUpdate}
             handleSelectChange={handleSelectChange}

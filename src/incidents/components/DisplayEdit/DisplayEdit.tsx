@@ -5,17 +5,15 @@ interface DisplayEditProps {
   id: number;
   asunto: string;
   selectedEstado: string;
+  estado: string;
   handleSelectChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handleClickUpdate: () => void;
 }
 
-export const DisplayEdit: React.FC<DisplayEditProps> = ({
-  id,
-  asunto,
-  selectedEstado,
-  handleSelectChange,
-  handleClickUpdate,
-}) => {
+export const DisplayEdit: React.FC<DisplayEditProps> = ({id,asunto,estado,selectedEstado,handleSelectChange,handleClickUpdate,}) => {
+  const options = ["pendiente", "en proceso", "resuelto"];
+  const filteredOptions = options.slice(options.indexOf(estado));
+
   return (
     <>
       <button
@@ -32,11 +30,11 @@ export const DisplayEdit: React.FC<DisplayEditProps> = ({
           value={selectedEstado}
           onChange={handleSelectChange}
         >
-          <option value="pendiente" selected>
-            Pendiente
-          </option>
-          <option value="en proceso">En proceso</option>
-          <option value="resuelto">Resuelto</option>
+          {filteredOptions.map((option) => (
+            <option key={option} value={option}>
+              {option.charAt(0).toUpperCase() + option.slice(1)}
+            </option>
+          ))}
         </select>
         <button onClick={handleClickUpdate} className="btn btn-primary mb-3">
           Actualizar
